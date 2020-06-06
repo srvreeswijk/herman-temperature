@@ -1,0 +1,53 @@
+
+${jsonencode({
+  "widgets": [
+    {
+        "type": "metric",
+        "x": 0,
+        "y": 0,
+        "width": 24,
+        "height": 9,
+        "properties": {
+            "metrics": [for thing in things : ["AWS/IoT", "${thing}", { "stat": "Maximum" }]],
+            "view": "timeSeries",
+            "stacked": false,
+            "region": "${AWS_REGION}",
+            "stat": "Average",
+            "period": 300,
+            "title": "Temperature",
+            "yAxis": {
+                "left": {
+                    "label": "Celcius",
+                    "showUnits": false,
+                    "min": 19,
+                    "max": 28
+                }
+            }
+        }
+    },
+    {
+        "type": "metric",
+        "x": 0,
+        "y": 9,
+        "width": 24,
+        "height": 6,
+        "properties": {
+            "metrics": [for thing in things : ["AWS/IoT/voltage", "${thing}"]],
+            "view": "timeSeries",
+            "stacked": false,
+            "region": "${AWS_REGION}",
+            "period": 300,
+            "title": "Voltage Battery",
+            "yAxis": {
+                "left": {
+                    "showUnits": false,
+                    "label": "Volt",
+                    "min": 3,
+                    "max": 4.2
+                }
+            },
+            "stat": "Average"
+        }
+    }
+             ]
+})}

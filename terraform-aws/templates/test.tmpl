@@ -1,0 +1,11 @@
+
+${jsonencode({
+  "widgets": [
+    {
+        "type": "metric",
+        "x": 0,
+        "y": 0,
+        "metrics": [for thing in things : "".", ${thing}:8080"],
+    }
+             ]
+})}
