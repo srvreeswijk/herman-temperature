@@ -18,5 +18,10 @@ variable "thing_ids" {
   default = ["herman1", "herman2"]
 }
 
+variable "mqtt_topic" {
+  type    = string
+  default = "topic/herman"
+}
+
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}

@@ -19,14 +19,14 @@ resource "aws_iot_policy" "herman_policy" {
         "iot:Connect",
         "iot:Subscribe"
       ],
-      "Resource": "arn:aws:iot:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
+      "Resource": "arn:aws:iot:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:client/$${iot:ClientId}"
     },
     {
       "Effect": "Allow",
       "Action": [
         "iot:Publish"
       ],
-      "Resource": "arn:aws:iot:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:topic/herman"
+      "Resource": "arn:aws:iot:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:topic/${var.mqtt_topic}"
     }
   ]
 }
@@ -81,6 +81,61 @@ resource "aws_iot_thing_principal_attachment" "iot_principal_att" {
   thing     = aws_iot_thing.herman_iot_thing[each.key].name
 }
 
+# IOT role to push metrics to CloudWatch
+resource "aws_iot_topic_rule" "temp_rule" {
+  name        = "hermanCloudWatchRule"
+  description = "push metrics to CloudWatch for Herman"
+  enabled     = true
+  sql         = "SELECT * FROM '${var.mqtt_topic}'"
+  sql_version = "2016-03-23"
+
+  cloudwatch_metric {
+    metric_name      = "$${location}"
+    metric_namespace = "herman/temp"
+    metric_unit      = "None"
+    metric_value     = "$${temp}"
+    role_arn         = aws_iam_role.iot_role.arn
+  }
+}
+
+resource "aws_iam_role" "iot_role" {
+  name = "iot_cloudwatch_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "iot.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "iot_cloudwatch_policy" {
+  name = "iot_cloudwatch_policy"
+  role = aws_iam_role.iot_role.id
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": {
+        "Effect": "Allow",
+        "Action": "cloudwatch:PutMetricData",
+        "Resource": [
+            "*"
+        ]
+    }
+}
+EOF
+}
+
+# Export certificates and print output to the screen
 # Get the aws iot endpoint to print out for reference
 data "aws_iot_endpoint" "endpoint" {
     endpoint_type = "iot:Data-ATS"

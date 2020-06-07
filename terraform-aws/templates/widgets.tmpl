@@ -8,7 +8,7 @@ ${jsonencode({
         "width": 24,
         "height": 9,
         "properties": {
-            "metrics": [for thing in things : ["AWS/IoT", "${thing}", { "stat": "Maximum" }]],
+            "metrics": [for thing in things : ["herman/temp", "${thing}", { "stat": "Maximum" }]],
             "view": "timeSeries",
             "stacked": false,
             "region": "${AWS_REGION}",
@@ -32,7 +32,7 @@ ${jsonencode({
         "width": 24,
         "height": 6,
         "properties": {
-            "metrics": [for thing in things : ["AWS/IoT/voltage", "${thing}"]],
+            "metrics": [for thing in things : ["herman/voltage", "${thing}"]],
             "view": "timeSeries",
             "stacked": false,
             "region": "${AWS_REGION}",
