@@ -1,6 +1,0 @@
-{
-  "type": "metric",
-  "width": ${width},
-  "height": ${height},
-  "properties": ${properties}
-}

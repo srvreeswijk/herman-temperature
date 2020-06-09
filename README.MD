@@ -1,4 +1,12 @@
-Steps
+# Generic info 
+iot_endpoint = a32ca4fja5ysxz-ats.iot.eu-central-1.amazonaws.com
+
+# Upload certificates to Wemos board
+With the Arduino plugin "esp2866 data upload" you can upload data/files to the 4MB flash storage of the Wemos board. 
+Just place the files in a directory named "data" in the scetch folder and upload the files. 
+The files will remain on the Wemos even after you upload a new sketch. 
+
+#Steps
 
 1. Copy the arduino code from a sensor and delete the files from the data directory within the arduino code. 
 2. Open the ah_variables.ino file and change the needed parameters. like sensor name, aws endpoint, sensor calibration etc. 

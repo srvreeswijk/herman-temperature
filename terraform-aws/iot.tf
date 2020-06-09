@@ -96,6 +96,14 @@ resource "aws_iot_topic_rule" "temp_rule" {
     metric_value     = "$${temp}"
     role_arn         = aws_iam_role.iot_role.arn
   }
+
+  cloudwatch_metric {
+    metric_name      = "$${location}"
+    metric_namespace = "herman/voltage"
+    metric_unit      = "None"
+    metric_value     = "$${voltage}"
+    role_arn         = aws_iam_role.iot_role.arn
+  }
 }
 
 resource "aws_iam_role" "iot_role" {
