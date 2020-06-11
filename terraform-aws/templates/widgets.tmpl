@@ -48,6 +48,30 @@ ${jsonencode({
             },
             "stat": "Average"
         }
+    },
+    {
+        "type": "metric",
+        "x": 0,
+        "y": 15,
+        "width": 24,
+        "height": 6,
+        "properties": {
+            "metrics": [for thing in things : ["herman/rssi", "${thing}"]],
+            "view": "timeSeries",
+            "stacked": false,
+            "region": "${AWS_REGION}",
+            "period": 300,
+            "title": "WiFi sterkte",
+            "yAxis": {
+                "left": {
+                    "showUnits": false,
+                    "label": "Volt",
+                    "min": -100,
+                    "max": 0
+                }
+            },
+            "stat": "Average"
+        }
     }
              ]
 })}

@@ -23,6 +23,11 @@ variable "mqtt_topic" {
   default = "topic/herman"
 }
 
+variable "sns_email_topic" {
+  type    = string
+  default = "email_CloudWatch_Alarms"
+}
+
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 

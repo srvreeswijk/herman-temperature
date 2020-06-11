@@ -11,6 +11,7 @@ resource "aws_cloudwatch_metric_alarm" "Temperatuur" {
   alarm_name                = "Temperatuur te hoog voor ${each.key}"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "2"
+  datapoints_to_alarm       = "2"
   metric_name               = each.key
   namespace                 = "herman/temp"
   period                    = "300"
@@ -19,14 +20,34 @@ resource "aws_cloudwatch_metric_alarm" "Temperatuur" {
   alarm_description         = "Een alarm bij een te hoge temperatuur voor ${each.key}"
   treat_missing_data        = "missing"
   insufficient_data_actions = []
+  alarm_actions             = [
+          "${aws_sns_topic.email-warning.arn}",
+        ]
 }
-  #alarm_actions             = [
-  #        - "arn:aws:sns:us-east-1:125035307346:Default_CloudWatch_Alarms_Topic",
-  #      ]
+
+resource "aws_cloudwatch_metric_alarm" "Battery" {
+  for_each = toset(var.thing_ids)
+
+  alarm_name                = "Accu spanning voor ${each.key} is te laag"
+  comparison_operator       = "LessThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  datapoints_to_alarm       = "2"
+  metric_name               = each.key
+  namespace                 = "herman/voltage"
+  period                    = "300"
+  statistic                 = "Maximum"
+  threshold                 = "3"
+  alarm_description         = "Een alarm bij een te lage voltage voor de accu van ${each.key}"
+  treat_missing_data        = "missing"
+  insufficient_data_actions = []
+  alarm_actions             = [
+          "${aws_sns_topic.email-warning.arn}",
+        ]
+}
 
 # aws_sns_topic.user_updates must be replaced
 resource "aws_sns_topic" "email-warning" {
-  name   = "email_CloudWatch_Alarms"
+  name   = var.sns_email_topic
 
   policy = <<EOF
 {
@@ -54,7 +75,7 @@ resource "aws_sns_topic" "email-warning" {
           "Principal" : {
               "AWS" : "*"
           },
-          "Resource" : "arn:aws:sns:eu-central-1:125035307346:cloudwatch-warning",
+          "Resource" : "arn:aws:sns:eu-central-1:125035307346:${var.sns_email_topic}",
           "Sid" : "__default_statement_ID"
       }
   ]
