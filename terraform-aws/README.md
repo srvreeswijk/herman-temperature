@@ -17,6 +17,10 @@ Klik op de email topic en voeg een subscription toe van het type email.
 Dit kan niet me terraform omdat een email subscription een bevestiging nodig heeft en dit kan terraform niet.  
 Omdat het tegen het principe van terraform in gaat. 
 
+Met terraform kan je een user aanmaken. Maar geen wachtwoord zetten. 
+Dus voeg een user toe aan terraform, geef deze user via IAM console handmatig een wachtwoord.  
+En laat de gebruiker dan zelf zijn wachtwoord resetten. 
+
 
 # export AWS config for easy terraform creation
 

@@ -14,29 +14,12 @@ resource "aws_iam_policy" "herman_policy" {
     "Statement": [
         {
             "Action": [
-                "cloudwatch:GetDashboard"
+                "cloudwatch:*",
+                "logs:*",
+                "sns:*"
             ],
             "Effect": "Allow",
-            "Resource": "arn:aws:cloudwatch::125035307346:dashboard/herman-koeling",
-            "Condition": {
-                "StringEquals": {
-                    "aws:RequestedRegion": "eu-central-1"
-                }
-            }
-        },
-        {
-            "Action": [
-                "cloudwatch:getMetricData",
-                "cloudwatch:GetMetricStatistics",
-                "cloudwatch:ListDashboards"
-            ],
-            "Effect": "Allow",
-            "Resource": "*",
-            "Condition": {
-                "StringEquals": {
-                    "aws:RequestedRegion": "eu-central-1"
-                }
-            }
+            "Resource": "*"
         }
     ]
 }
