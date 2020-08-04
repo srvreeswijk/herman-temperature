@@ -15,7 +15,7 @@ variable "phone_number" {
 # Update this list with your names of sensors. 
 variable "thing_ids" {
   type    = list(string)
-  default = ["herman1", "herman2", "herman3"]
+  default = ["machinekamer", "koelcel-hal", "vriezer"]
 }
 
 variable "mqtt_topic" {

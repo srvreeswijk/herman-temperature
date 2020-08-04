@@ -36,7 +36,7 @@ resource "aws_cloudwatch_metric_alarm" "Battery" {
   namespace                 = "herman/voltage"
   period                    = "300"
   statistic                 = "Maximum"
-  threshold                 = "3"
+  threshold                 = "3.1"
   alarm_description         = "Een alarm bij een te lage voltage voor de accu van ${each.key}"
   treat_missing_data        = "missing"
   insufficient_data_actions = []
