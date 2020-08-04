@@ -16,6 +16,7 @@ variable "phone_number" {
 variable "thing_ids" {
   type    = list(string)
   default = ["machinekamer", "koelcel-hal", "vriezer"]
+  # Waarschuwing: in dashboard.tf bij module alarms komt dit lijstje nog een keer voor, met max temperatuur waarden. 
 }
 
 variable "mqtt_topic" {

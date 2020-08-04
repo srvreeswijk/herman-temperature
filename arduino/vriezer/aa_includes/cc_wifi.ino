@@ -28,10 +28,19 @@ void setup_wifi() {
   Serial.println(ssid);
   
   WiFi.begin(ssid, password);
+
+  for (int i = 0; i <= 120; i++) {
+    if (WiFi.status() != WL_CONNECTED) {
+      Serial.print(".");
+      delay(500);
+    } else {
+      break;
+    }
+  }
   
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WIFI connection failed, retry in 10 seconds");
+    ESP.deepSleep(10 * 1000000);     // 10 seconds sleep
   }
   
   Serial.println("");
