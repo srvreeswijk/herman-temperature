@@ -18,5 +18,6 @@ int value = 0;
 /*
  * v2.   Retry on MQTT post failure
  * v2.1  small fix
+ * v2.2  Fixed endless loop on bad wifi connection
  * 
  */

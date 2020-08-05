@@ -1,6 +1,6 @@
 
 void reconnect() {
-  while (!client.connected()) {
+  if (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
     if (client.connect("testje")) {
@@ -12,10 +12,9 @@ void reconnect() {
       espClient.getLastSSLError(buf,256);
       Serial.print("WiFiClientSecure SSL error: ");
       Serial.println(buf);
-      
       // Wait 5 seconds before retrying
       Serial.println(" try again in 5 seconds");
-      delay(5000);
+      ESP.deepSleep(5 * 1000000);     // 5 seconds sleep
     }
   }
 }
@@ -87,7 +86,11 @@ void setup() {
   load_certificates();
   sensors.begin();
   send_message();
+  Serial.println("Disconnect MQTT client");
+  client.disconnect();
   blink_led();
-  
+  Serial.print("All done, see you in ");
+  Serial.print(slaapTijd / (60 * 1000000));
+  Serial.println(" minutes.");
   ESP.deepSleep(slaapTijd);
 }

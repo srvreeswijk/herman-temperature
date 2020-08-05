@@ -37,7 +37,7 @@ void setup_wifi() {
       break;
     }
   }
-  
+  Serial.println("");
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("WIFI connection failed, retry in 10 seconds");
     ESP.deepSleep(10 * 1000000);     // 10 seconds sleep
@@ -47,11 +47,19 @@ void setup_wifi() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-  
+
+  Serial.print("get current time");
   timeClient.begin();
-  while(!timeClient.update()){
-    timeClient.forceUpdate();
+  for (int i = 0; i <= 120; i++) {
+    if (!timeClient.update()){
+      if (timeClient.forceUpdate()){
+        break;
+      } 
+    } else {
+      break;
+    }
   }
-  
+  Serial.println("");
+
   espClient.setX509Time(timeClient.getEpochTime());
 }
