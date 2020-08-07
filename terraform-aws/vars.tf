@@ -11,6 +11,14 @@ variable "phone_number" {
   default = "+31625133230"
 } 
 
+locals {
+  things = {
+    "machinekamer" = { treshold = 50 },
+    "koelcel-hal" = { treshold = 7 },
+    "vriezer" = { treshold = -9 }
+  }
+}
+
 # A list of SIM IMSI ids. For each id an aws iot thing will be created.
 # Update this list with your names of sensors. 
 variable "thing_ids" {

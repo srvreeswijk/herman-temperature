@@ -5,28 +5,26 @@ resource "aws_cloudwatch_dashboard" "main" {
   dashboard_body = templatefile("${path.module}/templates/widgets.tmpl", { things = var.thing_ids, AWS_REGION = "${var.AWS_REGION}"})
 }
 
-# Hier moet het alarm komen
+# Temperature alarms
+resource "aws_cloudwatch_metric_alarm" "alarm" {
+  for_each = local.things
 
-module "alarms" {
-  source = "./modules/alarm"
-
-  things = {
-    "machinekamer" = {
-        name      = "machinekamer",
-        treshold = 40,
-        snsTopic = "${aws_sns_topic.email-warning.arn}"
-    },
-    "koelcel-hal" = {
-        name      = "koelcel-hal",
-        treshold  = 7,
-        snsTopic = "${aws_sns_topic.email-warning.arn}"
-    },
-    "vriezer" = {
-        name      = "vriezer",
-        treshold  = -9,
-        snsTopic = "${aws_sns_topic.email-warning.arn}"
-    }
-  }
+  alarm_name                = "Temperatuur te hoog voor ${each.key}"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "2"
+  datapoints_to_alarm       = "2"
+  metric_name               = each.key
+  namespace                 = "herman/temp"
+  period                    = "300"
+  statistic                 = "Maximum"
+  threshold                 = each.value.treshold
+  alarm_description         = "Een alarm bij een te hoge temperatuur voor ${each.key}"
+  #treat_missing_data options: missing, ignore, breaching and notBreaching
+  treat_missing_data        = "breaching"
+  insufficient_data_actions = []
+  alarm_actions             = [
+          "${aws_sns_topic.email-warning.arn}",
+        ]
 }
 
 resource "aws_cloudwatch_metric_alarm" "Battery" {
