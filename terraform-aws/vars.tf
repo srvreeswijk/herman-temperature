@@ -11,6 +11,7 @@ variable "phone_number" {
   default = "+31625133230"
 } 
 
+# A list of sensor names and treshold values on which to send a alarm
 locals {
   things = {
     "machinekamer" = { treshold = 50 },
@@ -19,13 +20,6 @@ locals {
   }
 }
 
-# A list of SIM IMSI ids. For each id an aws iot thing will be created.
-# Update this list with your names of sensors. 
-variable "thing_ids" {
-  type    = list(string)
-  default = ["machinekamer", "koelcel-hal", "vriezer"]
-  # Waarschuwing: in dashboard.tf bij module alarms komt dit lijstje nog een keer voor, met max temperatuur waarden. 
-}
 
 variable "mqtt_topic" {
   type    = string

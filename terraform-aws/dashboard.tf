@@ -2,7 +2,7 @@
 resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = "herman-koeling"
 
-  dashboard_body = templatefile("${path.module}/templates/widgets.tmpl", { things = var.thing_ids, AWS_REGION = "${var.AWS_REGION}"})
+  dashboard_body = templatefile("${path.module}/templates/widgets.tmpl", { things = keys(local.things), AWS_REGION = "${var.AWS_REGION}"})
 }
 
 # Temperature alarms
@@ -28,7 +28,7 @@ resource "aws_cloudwatch_metric_alarm" "alarm" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "Battery" {
-  for_each = toset(var.thing_ids)
+  for_each = local.things
 
   alarm_name                = "Accu spanning voor ${each.key} is te laag"
   comparison_operator       = "LessThanOrEqualToThreshold"

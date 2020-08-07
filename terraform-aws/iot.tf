@@ -1,6 +1,6 @@
 # The aws iot thing(s)
 resource "aws_iot_thing" "herman_iot_thing" {
-  for_each = toset(var.thing_ids)
+  for_each = local.things
 
   name = each.key
 }
@@ -35,14 +35,14 @@ EOF
 
 # Create an aws iot certificate
 resource "aws_iot_certificate" "iot_cert" {
-  for_each = toset(var.thing_ids)
+  for_each = local.things
 
   active = true
 }
 
 # Attach policy generated above to the aws iot thing(s)
 resource "aws_iot_policy_attachment" "iot_policy_att" {
-  for_each = toset(var.thing_ids)
+  for_each = local.things
 
   policy = aws_iot_policy.herman_policy.name
   target = aws_iot_certificate.iot_cert[each.key].arn
@@ -51,7 +51,7 @@ resource "aws_iot_policy_attachment" "iot_policy_att" {
 
 # Output certificate to /cert/{THING} folder
 resource "local_file" "iot_cert_pem" {
-  for_each = toset(var.thing_ids)
+  for_each = local.things
 
   content     = aws_iot_certificate.iot_cert[each.key].certificate_pem
   filename = "${path.module}/certs/${each.key}/${substr(aws_iot_certificate.iot_cert[each.key].id,0,12)}.pem.crt"
@@ -59,7 +59,7 @@ resource "local_file" "iot_cert_pem" {
 
 # Output private key to /cert/{THING} folder
 resource "local_file" "iot_private_key" {
-  for_each = toset(var.thing_ids)
+  for_each = local.things
 
   content     = aws_iot_certificate.iot_cert[each.key].private_key
   filename = "${path.module}/certs/${each.key}/${substr(aws_iot_certificate.iot_cert[each.key].id,0,12)}.private.key"
@@ -67,7 +67,7 @@ resource "local_file" "iot_private_key" {
 
 # Output public key to /cert/{THING} folder
 resource "local_file" "iot_public_key" {
-  for_each = toset(var.thing_ids)
+  for_each = local.things
 
   content     = aws_iot_certificate.iot_cert[each.key].public_key
   filename = "${path.module}/certs/${each.key}/${substr(aws_iot_certificate.iot_cert[each.key].id,0,12)}.public.key"
@@ -75,7 +75,7 @@ resource "local_file" "iot_public_key" {
 
 # Attach AWS iot cert generated above to the aws iot thing(s) 
 resource "aws_iot_thing_principal_attachment" "iot_principal_att" {
-  for_each = toset(var.thing_ids)
+  for_each = local.things
 
   principal = aws_iot_certificate.iot_cert[each.key].arn
   thing     = aws_iot_thing.herman_iot_thing[each.key].name
