@@ -28,30 +28,6 @@ ${jsonencode({
     {
         "type": "metric",
         "x": 0,
-        "y": 9,
-        "width": 24,
-        "height": 6,
-        "properties": {
-            "metrics": [for thing in things : ["herman/voltage", "${thing}"]],
-            "view": "timeSeries",
-            "stacked": false,
-            "region": "${AWS_REGION}",
-            "period": 600,
-            "title": "Voltage Battery",
-            "yAxis": {
-                "left": {
-                    "showUnits": false,
-                    "label": "Volt",
-                    "min": 2.5,
-                    "max": 4.3
-                }
-            },
-            "stat": "Average"
-        }
-    },
-    {
-        "type": "metric",
-        "x": 0,
         "y": 15,
         "width": 24,
         "height": 6,

@@ -14,7 +14,7 @@ variable "phone_number" {
 # A list of sensor names and treshold values on which to send a alarm
 locals {
   things = {
-    "machinekamer" = { treshold = 50 },
+    "koelcel-voor" = { treshold = 7 },
     "koelcel-hal" = { treshold = 7 },
     "vriezer" = { treshold = -9 }
   }
