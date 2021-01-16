@@ -1,3 +1,5 @@
+
+# Lambda function for warning temperature and stroonstoring
 data "archive_file" "warning_lambda_zip" {
     type          = "zip"
     source_file   = "lambda/warning_temperature/index.js"
@@ -10,6 +12,22 @@ resource "aws_lambda_function" "warning_lambda" {
   role             = aws_iam_role.lambda_ses_role.arn
   handler          = "index.handler"
   source_code_hash = data.archive_file.warning_lambda_zip.output_base64sha256
+  runtime          = "nodejs12.x"
+}
+
+# Lambda function for when all is OK again
+data "archive_file" "ok_email_zip" {
+    type          = "zip"
+    source_file   = "lambda/ok_email/index.js"
+    output_path   = "ok_email.zip"
+}
+
+resource "aws_lambda_function" "ok_email" {
+  filename         = "ok_email.zip"
+  function_name    = "send_ok_email"
+  role             = aws_iam_role.lambda_ses_role.arn
+  handler          = "index.handler"
+  source_code_hash = data.archive_file.ok_email_zip.output_base64sha256
   runtime          = "nodejs12.x"
 }
 
@@ -62,11 +80,22 @@ resource "aws_iam_role_policy_attachment" "lambda_ses_attachment" {
   policy_arn = aws_iam_policy.lambda_ses_policy.arn
 }
 
+# for warning_lambda function
 # Add trigger to labda that allows the cloudwatch event_rule to trigger the lambda function
-resource "aws_lambda_permission" "allow_cloudwatch" {
+resource "aws_lambda_permission" "allow_cloudwatch_warning" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.warning_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.temperature_alarm.arn
+}
+
+# for ok lambda funtion
+# Add trigger to labda that allows the cloudwatch event_rule to trigger the lambda function
+resource "aws_lambda_permission" "allow_cloudwatch_ok" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.ok_email.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.ok_alarm.arn
 }

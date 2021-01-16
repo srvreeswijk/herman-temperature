@@ -14,8 +14,8 @@ exports.handler = async function (event) {
                   " is geconstateerd dat " + event.detail.configuration.metrics[0].metricStat.metric.name + " een te hoge temperatuur heeft." +
                   "\n\nDe technische details voor dit alarm staan hier onder." +
                   "\nLet op dat de genoemde tijd in UTC is en niet gecorrigeerd voor de Nederlandse tijdzone.\n" +
-                  event.detail.state.reason + "\n\n" +
-                  JSON.stringify(event);
+                  event.detail.state.reason;
+                  //+ "\n\n" + JSON.stringify(event);
   }
 
   var params = {

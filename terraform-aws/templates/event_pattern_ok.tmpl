@@ -1,0 +1,16 @@
+${jsonencode({
+  "source": [
+    "aws.cloudwatch"
+  ],
+  "resources": [for arn in ALARM_ARN : "${arn}"],
+  "detail-type": [
+    "CloudWatch Alarm State Change"
+  ],
+  "detail": {
+    "state": {
+      "value": [
+        "OK"
+      ]
+    }
+  }
+})}
