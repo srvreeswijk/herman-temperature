@@ -11,8 +11,8 @@ resource "aws_cloudwatch_metric_alarm" "alarm" {
 
   alarm_name                = "Temperatuur te hoog voor ${each.key}"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "2"
-  datapoints_to_alarm       = "2"
+  evaluation_periods        = "3"
+  datapoints_to_alarm       = "3"
   metric_name               = each.key
   namespace                 = "herman/temp"
   period                    = "300"
