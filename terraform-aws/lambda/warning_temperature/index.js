@@ -4,17 +4,17 @@ exports.handler = async function (event) {
   
   var time = new Date(event.detail.state.timestamp)
   if (event.detail.state.reason.includes('[Breaching]')){
-    var subject = "STROOMSTORING: " + " voor " + event.detail.configuration.metrics[0].metricStat.metric.name;
+    var subject = "GEEN DATA: " + " voor " + event.detail.configuration.metrics[0].metricStat.metric.name;
     var message = "Op " + time.toLocaleDateString('nl-NL', { timeZone: 'Europe/Amsterdam' }) + " om " + time.toLocaleTimeString('nl-NL', { timeZone: 'Europe/Amsterdam' }) +
                 " is geconstateerd dat er al een tijdje geen meetwaarden meer binnenkomen.\n" +
-                "De logische conclusie is dat er een stroomstoring is." 
+                "Indien dit voor alle koelingen op het zelfde moment is, dan zou er een stroomstoring kunnen zijn. Of een wifi probleem." 
   } else {
     var subject = "ALARM: " + event.detail.alarmName;
     var message = "Op " + time.toLocaleDateString('nl-NL', { timeZone: 'Europe/Amsterdam' }) + " om " + time.toLocaleTimeString('nl-NL', { timeZone: 'Europe/Amsterdam' }) +
-                  " is geconstateerd dat " + event.detail.configuration.metrics[0].metricStat.metric.name + " een te hoge temperatuur heeft." +
-                  "\n\nDe technische details voor dit alarm staan hier onder." +
-                  "\nLet op dat de genoemde tijd in UTC is en niet gecorrigeerd voor de Nederlandse tijdzone.\n" +
-                  event.detail.state.reason;
+                  " is geconstateerd dat " + event.detail.configuration.metrics[0].metricStat.metric.name + " een te hoge temperatuur heeft.\n" 
+                  //"\n\nDe technische details voor dit alarm staan hier onder." +
+                  //"\nLet op dat de genoemde tijd in UTC is en niet gecorrigeerd voor de Nederlandse tijdzone.\n" +
+                  //event.detail.state.reason;
                   //+ "\n\n" + JSON.stringify(event);
   }
 
