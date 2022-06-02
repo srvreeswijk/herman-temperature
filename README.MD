@@ -6,7 +6,7 @@ With the Arduino plugin "esp2866 data upload" you can upload data/files to the 4
 Just place the files in a directory named "data" in the scetch folder and upload the files. 
 The files will remain on the Wemos even after you upload a new sketch. 
 
-#Steps
+# Steps
 
 1. Copy the arduino code from a sensor and delete the files from the data directory within the arduino code. 
 2. Open the ah_variables.ino file and change the needed parameters. like sensor name, aws endpoint, sensor calibration etc. 
@@ -23,4 +23,12 @@ Converting PEM to DER format: (On Windowns you should download openssl first)
 ```
 $ openssl x509 -in aaaaaaaaa-certificate.pem.crt.txt -out cert.der -outform DER 
 $ openssl rsa -in aaaaaaaaaa-private.pem.key -out private.der -outform DER
+```
+
+# Use specific AWS profile as terraform provider
+```
+provider "aws" { 
+    region = var.AWS_REGION
+    profile = var.AWS_PROFILE
+}
 ```

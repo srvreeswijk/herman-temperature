@@ -3,6 +3,11 @@ variable "AWS_REGION" {
   default = "eu-central-1"
 }
 
+variable "AWS_PROFILE" {
+  type = string
+  default = "sebas"
+}
+
 # Update this variable with a cell phone number 
 # that will receive the text messages
 # Please include country code: ex. +18885555555
@@ -20,7 +25,8 @@ locals {
   }
   email = {
     "sebas"  = { email = "s.vreeswijk@gmail.com"},
-    "gerrit" = { email = "gerrit.jan.vreeswijk@gmail.com"}
+    "gerrit" = { email = "gerrit.jan.vreeswijk@gmail.com"},
+    "herman" = {email = "h.vernooij@ziggo.nl"}
   }
 }
 

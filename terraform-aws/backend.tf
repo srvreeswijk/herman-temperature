@@ -3,5 +3,6 @@ terraform {
     bucket = "herman-koeling-temp"
     key    = "IoT/herman-koeling-temp.tfstate"
     region = "eu-central-1"
+    profile = "sebas"
   }
 }
